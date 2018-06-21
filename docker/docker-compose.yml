@@ -10,6 +10,13 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
             MYSQL_DATABASE: $MYSQL_DATABASE
+    db_test:
+        build: ./mysql
+        ports:
+            - $MYSQL_TEST_PORT:3306
+        environment:
+            MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+            MYSQL_DATABASE: $MYSQL_DATABASE
     php:
         build:
             context: ./php-fpm
@@ -18,10 +25,12 @@ services:
                 PGID: $PGID
         links:
             - db
+            - db_test
         working_dir: /var/www
         environment:
-            SYMFONY__MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
-            SYMFONY__MYSQL_DATABASE: $MYSQL_DATABASE
+            MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+            MYSQL_DATABASE: $MYSQL_DATABASE
+            MYSQL_TEST_DATABASE_HOST: db_test
         volumes:
             - ../:/var/www
     nginx:

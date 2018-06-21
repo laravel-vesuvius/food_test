@@ -30,6 +30,9 @@ framework:
     assets: ~
     php_errors:
         log: true
+    serializer: { enable_annotations: true }
+    property_info:
+        enabled: true
 
 # Twig Configuration
 twig:
@@ -65,3 +68,15 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+# FOSRest Configuration
+fos_rest:
+    param_fetcher_listener: true
+    body_listener: true
+    view:
+        view_response_listener: 'force'
+    format_listener:
+        rules:
+            - { path: ^/, priorities: [ json ], fallback_format: json, prefer_extension: true }
+    exception:
+        enabled: true
